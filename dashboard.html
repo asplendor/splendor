@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WHEN — Executive Product Dashboard</title>
+
+  <!-- ── Google Fonts ─────────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- ── Tailwind (CDN — utility classes only) ─────────────────────────── -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ── React + ReactDOM ──────────────────────────────────────────────── -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- ── Babel Standalone (in-browser JSX transpilation) ───────────────── -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* ── Reset ──────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      background: #0e0e0e;
+      color: #e8e8e8;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ───────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar       { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0e0e0e; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+    /* ── Skeleton shimmer ────────────────────────────────────────────────── */
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position:  200% 0; }
+    }
+    .sk {
+      background: linear-gradient(
+        90deg,
+        #262626 25%,
+        #323232 50%,
+        #262626 75%
+      ) !important;
+      background-size: 200% 100% !important;
+      animation: shimmer 1.6s infinite linear;
+    }
+
+    /* ── Shake animation (wrong password) ───────────────────────────────── */
+    @keyframes shake {
+      0%  { transform: translateX(0); }
+      15% { transform: translateX(-8px); }
+      30% { transform: translateX(8px); }
+      45% { transform: translateX(-6px); }
+      60% { transform: translateX(6px); }
+      75% { transform: translateX(-3px); }
+      90% { transform: translateX(3px); }
+      100%{ transform: translateX(0); }
+    }
+
+    /* ── Blink / pulse (live indicator, urgent dot) ─────────────────────── */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.25; }
+    }
+
+    /* ── Fade opacity loop (syncing label) ──────────────────────────────── */
+    @keyframes fadeOpacity {
+      from { opacity: 0.3; }
+      to   { opacity: 0.9; }
+    }
+
+    /* ── Tailwind config overrides (dark palette) ───────────────────────── */
+    /* No Tailwind purge needed — CDN version includes all utilities */
+  </style>
+
+  <!--
+    OPTIONAL — Pre-configure your Linear API key so users aren't prompted:
+    Uncomment the line below and replace with your key.
+
+    <script>window.LINEAR_API_KEY = 'lin_api_xxxxxxxxxxxxxxxxxxxx';</script>
+  -->
+</head>
+<body>
+  <div id="root"></div>
+
+  <!--
+    Dashboard source loaded as Babel JSX.
+    Babel transpiles this on the fly in the browser — no build step required.
+  -->
+  <script type="text/babel" src="ExecutiveDashboard.jsx" data-presets="react"></script>
+</body>
+</html>
