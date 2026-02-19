@@ -85,10 +85,11 @@
   </style>
 
   <!--
-    OPTIONAL — Pre-configure your Linear API key so users aren't prompted:
-    Uncomment the line below and replace with your key.
-
-    <script>window.LINEAR_API_KEY = 'lin_api_xxxxxxxxxxxxxxxxxxxx';</script>
+    ARCHITECTURE NOTES:
+    - Linear API key is now managed server-side via server.js + .env
+    - The backend proxy (server.js) handles authentication securely
+    - Browser calls /api/linear endpoint (same server, no CORS issues)
+    - This is more secure than exposing the API key client-side
   -->
 </head>
 <body>

@@ -130,18 +130,30 @@ function projectStatusLabel(state) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LINEAR GRAPHQL CLIENT
+// LINEAR GRAPHQL CLIENT (via backend proxy)
 // ─────────────────────────────────────────────────────────────────────────────
 async function gql(query, apiKey) {
-  const res = await fetch('https://api.linear.app/graphql', {
+  // Proxy through backend for CORS + auth security
+  // The backend is configured with the actual Linear API key
+  const endpoint = process.env.NODE_ENV === 'production'
+    ? '/api/linear'  // On Render, backend is same origin
+    : 'http://localhost:3001/api/linear';  // Local dev
+
+  const res = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      'Authorization': apiKey,
       'Content-Type': 'application/json',
+      // Note: apiKey param is now unused (auth is server-side)
+      // Keeping for backwards compatibility
     },
     body: JSON.stringify({ query }),
   });
-  if (!res.ok) throw new Error(`Linear API returned HTTP ${res.status}`);
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Proxy error (${res.status}): ${err}`);
+  }
+
   const json = await res.json();
   if (json.errors?.length) throw new Error(json.errors[0].message);
   return json.data;
@@ -1318,16 +1330,7 @@ function App() {
   const [lastFetched, setLastFetched] = useState(null);
 
   const handlePasswordSuccess = () => {
-    if (PRECONFIGURED_KEY) {
-      setPhase('dashboard');
-      setTimeout(() => setVisible(true), 60);
-    } else {
-      setPhase('apikey');
-    }
-  };
-
-  const handleApiKey = (key) => {
-    setApiKey(key);
+    // Backend proxy handles Linear auth — no need for client-side API key
     setPhase('dashboard');
     setTimeout(() => setVisible(true), 60);
   };
@@ -1367,9 +1370,8 @@ function App() {
 
   const toggleNode = (id) => setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
 
-  // ── RENDER GATES ────────────────────────────────────────────────────────────
+  // ── RENDER GATE ─────────────────────────────────────────────────────────────
   if (phase === 'password') return <PasswordGate onSuccess={handlePasswordSuccess} />;
-  if (phase === 'apikey')   return <ApiKeyGate   onSubmit={handleApiKey} />;
 
   // ── DASHBOARD ───────────────────────────────────────────────────────────────
   return (
